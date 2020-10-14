@@ -15,4 +15,10 @@ public class Product {
     private String productNm;
     private Integer price;
     private Integer inventoryCnt;
+
+    @Override
+    public String toString() {
+        return "Product [productNo=" + productNo + ", type=" + type + ", productNm=" + productNm + ", price=" + price
+                + ", inventoryCnt=" + inventoryCnt + "]";
+    }
 }

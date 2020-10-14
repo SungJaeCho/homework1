@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ProductService {
 
-    public static List<Product> createProduct(){
+    public List<Product> createProduct(){
         List<Product> productList = new ArrayList<>();
         productList.add(new Product("16374", "KLASS", "스마트스토어로 월 100만원 만들기, 평범한 사람이 돈을 만드는 비법", 151950, 99999));
         productList.add(new Product("26825", "KLASS", "해금, 특별하고 아름다운 나만의 반려악기", 114500, 99999));
@@ -30,6 +30,16 @@ public class ProductService {
         productList.add(new Product("74218", "KLASS", "나만의 문방구를 차려요! 그리지영의 타블렛으로 굿즈 만들기", 191600, 99999));
         productList.add(new Product("28448", "KLASS", "당신도 할 수 있다! 베테랑 실무자가 알려주는 모션그래픽의 모든 것", 52200, 99999));
         return productList;
+    }
+
+    public Product selectOne(String sProductNo, List<Product> sProductList){
+        Product rstProduct = new Product();
+        for(Product product : sProductList){
+            if(sProductNo.equalsIgnoreCase(product.getProductNo())){
+                rstProduct = product;
+            }
+        }
+        return rstProduct;
     }
 
 
