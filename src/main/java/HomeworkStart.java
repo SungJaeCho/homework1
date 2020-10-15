@@ -3,9 +3,7 @@ import model.Product;
 import service.CartService;
 import service.ProductService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class HomeworkStart{
 
@@ -15,16 +13,25 @@ public class HomeworkStart{
     public  static boolean whileFlag02 = true;
     public  static String switchStr01 = null;
     public  static String switchStr02 = "";
+    public static ProductService productService;
+    public static CartService cartService;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException {
+        order();
+    }
+
+    public static void order(){
         //상품생성
-        ProductService productService = new ProductService();
+        productService = new ProductService();
+        cartService = new CartService();
+
         productList = productService.createProduct();
-        CartService cartService = new CartService();
-
-        Scanner sc = new Scanner(System.in);
         cartList = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
 
+        Map<String, Object> payMap = new HashMap<>();
+        Integer targetAmt = 50000; //배송료목표 금액
+        Integer shippingFee = 5000; //배송료
         String sProductNo;
         Integer sAmount;
         String msg;
@@ -43,18 +50,29 @@ public class HomeworkStart{
                     while (whileFlag02){
                         switch (switchStr02){
                             case " ": //계산
-                                System.out.println("주문내역 :");
-                                System.out.println("--------------------------------------------------------");
-                                for(Cart printCart : cartList){
-                                    System.out.println(printCart);
+                                if(!cartList.isEmpty()){
+                                    System.out.println("주문내역 :");
+                                    System.out.println("--------------------------------------------------------");
+                                    for(Cart printCart : cartList){
+                                        System.out.println(printCart.getProductNm() + "  - " + printCart.getAmount() + "개");
+                                    }
+                                    System.out.println("--------------------------------------------------------");
+                                    payMap = cartService.sumReqAmt(productList, cartList, targetAmt, shippingFee);
+                                    if("COMPLETE".equalsIgnoreCase(payMap.get("result").toString())){
+                                        System.out.println("주문금액 : " + String.format("%,d",payMap.get("sumReqAmt")) +"원");
+                                        if(Integer.valueOf(payMap.get("shippingFee").toString()) > 0){
+                                            System.out.println("배송비 : " + String.format("%,d",payMap.get("shippingFee")) +"원");
+                                        }
+                                        System.out.println("--------------------------------------------------------");
+                                        System.out.println("지불금액 : " + String.format("%,d",(Integer.valueOf(payMap.get("sumReqAmt").toString()) + Integer.valueOf(payMap.get("shippingFee").toString()))) + "원");
+                                    }
+                                    //실패시
+                                    else {
+                                        System.out.println("결제 실패 : " + payMap.get("msg"));
+                                    }
+                                    System.out.println("--------------------------------------------------------");
                                 }
-                                System.out.println("--------------------------------------------------------");
-                                System.out.println("주문금액 :");
-                                System.out.println("배송비 :");
-                                System.out.println("--------------------------------------------------------");
-                                System.out.println("지불금액 :");
-                                System.out.println("--------------------------------------------------------");
-
+                                cartList.clear();
                                 whileFlag02 = false;
                                 switchStr02 = "";
                                 break;
@@ -79,19 +97,16 @@ public class HomeworkStart{
                                 }
                                 break;
                         }
-                    }
+                    }//while02
                     break;
-
                 case "q": //종료
-                    System.out.println("종료");
+                    System.out.println("고객님의 주문 감사합니다.");
                     whileFlag01 = false;
                     break;
                 default: System.out.println("다시 입력해 주십시요.");
                     break;
             }
-
-        }
-
+        }//while01
     }
 
 }

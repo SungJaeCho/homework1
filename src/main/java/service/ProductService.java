@@ -1,5 +1,6 @@
 package service;
 
+import model.Cart;
 import model.Product;
 
 import java.util.ArrayList;
@@ -34,12 +35,34 @@ public class ProductService {
 
     public Product selectOne(String sProductNo, List<Product> sProductList){
         Product rstProduct = new Product();
-        for(Product product : sProductList){
-            if(sProductNo.equalsIgnoreCase(product.getProductNo())){
-                rstProduct = product;
+        for(Product productMap : sProductList){
+            if(sProductNo.equalsIgnoreCase(productMap.getProductNo())){
+                rstProduct = productMap;
             }
         }
         return rstProduct;
+    }
+
+    public Integer updateAmount(String sProductNo, Integer sAmount, List<Product> sProductList){
+        Integer result = 0;
+        for(Product productMap : sProductList){
+            if(sProductNo.equalsIgnoreCase(productMap.getProductNo())){
+                productMap.setInventoryCnt(productMap.getInventoryCnt() - sAmount);
+                result++;
+                break;
+            }
+        }
+        return result;
+    }
+    public void rollbackAmount(List<Cart> sCartList , List<Product> sProductList){
+        for(Cart cartMap : sCartList){
+            for(Product productMap : sProductList){
+                if(cartMap.getProductNo().equalsIgnoreCase(productMap.getProductNo())){
+                    productMap.setInventoryCnt(productMap.getInventoryCnt() + cartMap.getAmount());
+                    break;
+                }
+            }
+        }
     }
 
 

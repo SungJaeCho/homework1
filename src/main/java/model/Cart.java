@@ -13,10 +13,11 @@ public class Cart {
     private String productNo;
     private String type;
     private String productNm;
+    private Integer price;
     private Integer amount;
 
     @Override
     public String toString() {
-        return "Cart [productNo=" + productNo + ", type=" + type + ", productNm=" + productNm + ", amount=" + amount +"]";
+        return "Cart [productNo=" + productNo + ", type=" + type + ", productNm=" + productNm + ", amount=" + amount + ", price=" + price +"]";
     }
 }
