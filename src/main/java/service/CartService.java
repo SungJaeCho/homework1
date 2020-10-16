@@ -14,7 +14,6 @@ public class CartService {
 
     public String addValidate(String sProductNo, Integer sAmount, List<Cart> sCartList, List<Product> sProductList){
         String msg = "PASS";
-        //클래스의 리스트에 1개이상 불가
         Product product = productService.selectOne(sProductNo, sProductList);
 
         if(product.getProductNo() == null){
@@ -29,7 +28,6 @@ public class CartService {
             msg = "동일한 클래스는 하나만 주문이 가능합니다.";
             return msg;
         }
-        //카트에 동일한 클래스가 있는지 체크
         for(Cart cartMap : sCartList){
             if("KLASS".equalsIgnoreCase(cartMap.getType()) && cartMap.getProductNo().equalsIgnoreCase(sProductNo)){
                 msg = "동일한 클래스는 하나만 주문이 가능합니다.";
